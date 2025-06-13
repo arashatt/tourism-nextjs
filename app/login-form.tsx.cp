@@ -7,11 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import React, { useEffect } from 'react';
-import Link from 'next/link';
 
 export default function LoginForm() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -35,24 +33,13 @@ export default function LoginForm() {
     }
   };
 
-if (status === "loading") {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-        <Card className="w-full max-w-md">
-          <CardContent className="flex min-h-[200px] items-center justify-center">
-            <p>بارگذاری...</p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
   if (session) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4" dir="rtl">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle>خوش آمدید</CardTitle>
-            <CardDescription>شما به عنوان کاربر {session.user?.name} وارد  شده‌اید.</CardDescription>
+            <CardTitle>Welcome</CardTitle>
+            <CardDescription>You are signed in as {session.user?.name}.</CardDescription>
           </CardHeader>
           <CardContent>
             <Button
@@ -60,7 +47,7 @@ if (status === "loading") {
               variant="destructive"
               className="w-full"
             >
-              خروج
+              Sign out
             </Button>
           </CardContent>
         </Card>
@@ -81,7 +68,7 @@ if (status === "loading") {
           )}
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="identifier">نام کاربری یا ایمیل</Label>
+              <Label htmlFor="identifier">Username or Email</Label>
               <Input
                 id="identifier"
                 type="text"
@@ -90,10 +77,7 @@ if (status === "loading") {
                 onChange={(e) => setIdentifier(e.target.value)}
                 required
               />
-
             </div>
-
-
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input
@@ -106,15 +90,11 @@ if (status === "loading") {
               />
             </div>
             <Button type="submit" className="w-full">
-	     ورود 
+              Sign In
             </Button>
           </form>
         </CardContent>
-        <Link href="/signup" className="text-blue-600 hover:underline text-sm text-center block mt-4">
-        Don't have an account? Sign up
-        </Link>
       </Card>
-      
     </div>
   );
 }

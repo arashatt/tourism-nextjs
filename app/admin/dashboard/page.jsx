@@ -23,14 +23,15 @@ export default async function AdminDashboardPage() {
     redirect("/");  // no admin rights
   }
 
-  return (
+	return (
     <div className="min-h-screen p-8 bg-gray-100">
       <h1 className="text-4xl font-bold mb-8">Admin Dashboard</h1>
- 
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Link href="/admin/cities">
           <Card className="hover:shadow-xl transition">
             {user.role}
+
             <CardHeader>
               <CardTitle>Manage Cities</CardTitle>
             </CardHeader>
@@ -58,5 +59,5 @@ export default async function AdminDashboardPage() {
       </div>
     </div>
   );
-
 }
+

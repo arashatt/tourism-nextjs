@@ -25,8 +25,8 @@ model City {
 
 model Tour {
   id          String    @id @default(cuid())
+  title       String
   name        String
-  description String
   price       Float
   cityId      String
   bookings    Booking[]
@@ -40,4 +40,5 @@ model Booking {
   tourId String
   tour   Tour     @relation(fields: [tourId], references: [id])
   user   User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
 }

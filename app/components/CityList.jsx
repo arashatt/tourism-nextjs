@@ -12,7 +12,7 @@ export default function CityList() {
   useEffect(() => {
     async function fetchCities() {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cities`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cities`);
         if (!res.ok) throw new Error("Failed to fetch cities.");
         const data = await res.json();
         setCities(data);

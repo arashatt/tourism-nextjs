@@ -1,14 +1,14 @@
 "use client";
 
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession, getSession } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import React, { useEffect } from 'react';
-import Link from 'next/link';
+import React from "react";
+import Link from "next/link";
 
 export default function LoginForm() {
   const { data: session, status } = useSession();
@@ -25,19 +25,24 @@ export default function LoginForm() {
       identifier,
       password,
       redirect: false,
-      callbackUrl: "/dashboard",
     });
 
     if (result?.error) {
-      setError("Invalid username/email or password. Please try again.");
+      setError("نام کاربری یا رمز عبور اشتباه است.");
     } else {
-      router.push("/dashboard");
+      const session = await getSession();
+      if (session?.user?.role === "admin") {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/");
+      }
     }
   };
 
-if (status === "loading") {
+  // 🟡 loading session
+  if (status === "loading") {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+      <div className="flex min-h-screen items-center justify-center  p-4">
         <Card className="w-full max-w-md">
           <CardContent className="flex min-h-[200px] items-center justify-center">
             <p>بارگذاری...</p>
@@ -46,20 +51,20 @@ if (status === "loading") {
       </div>
     );
   }
+
+  // 🟢 user already logged in
   if (session) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4" dir="rtl">
+      <div className="flex min-h-screen items-center justify-center  p-4" dir="rtl">
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle>خوش آمدید</CardTitle>
-            <CardDescription>شما به عنوان کاربر {session.user?.name} وارد  شده‌اید.</CardDescription>
+            <CardDescription>
+              شما به عنوان {session.user?.name} وارد شده‌اید.
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button
-              onClick={() => signOut()}
-              variant="destructive"
-              className="w-full"
-            >
+            <Button onClick={() => signOut()} variant="destructive" className="w-full">
               خروج
             </Button>
           </CardContent>
@@ -68,12 +73,15 @@ if (status === "loading") {
     );
   }
 
+  // 🔵 not logged in — show login form
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+    <div className="flex min-h-screen items-center justify-center  p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="font-vazir">ورود</CardTitle>
-          <CardDescription className="font-vazir">نام کاربری یا ایمیل و رمز عبور خود را وارد کنید</CardDescription>
+          <CardDescription className="font-vazir">
+            نام کاربری یا ایمیل و رمز عبور خود را وارد کنید
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {error && (
@@ -85,36 +93,36 @@ if (status === "loading") {
               <Input
                 id="identifier"
                 type="text"
-                placeholder="Enter username or email"
+                placeholder="نام کاربری یا ایمیل"
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
                 required
               />
-
             </div>
 
-
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">رمز عبور</Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="Enter password"
+                placeholder="رمز عبور"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
             <Button type="submit" className="w-full">
-	     ورود 
+              ورود
             </Button>
           </form>
         </CardContent>
-        <Link href="/signup" className="text-blue-600 hover:underline text-sm text-center block mt-4">
-        Don't have an account? Sign up
+        <Link
+          href="/signup"
+          className="text-blue-600 hover:underline text-sm text-center block mt-4"
+        >
+          حساب کاربری ندارید؟ ثبت‌نام کنید
         </Link>
       </Card>
-      
     </div>
   );
 }

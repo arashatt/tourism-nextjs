@@ -2,14 +2,27 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth"; // Make sure this path is correct
 import { prisma } from "@/lib/prisma";   // Make sure this path is correct
 import CityForm from "@/components/CityForm"; // Reusable form to add a city
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default async function AdminCitiesPage() {
   const session = await getServerSession(authOptions);
-
+  
   if (!session?.user?.email) {
-    return <p className="text-center text-red-600 mt-8">دسترسی غیرمجاز: لطفاً وارد شوید.</p>;
-  }
+  return (
+    <div className="text-center mt-8">
+      <p className="text-destructive mb-4">دسترسی غیرمجاز: لطفاً وارد شوید.</p>
+      <Link href="/login" passHref>
+<Button asChild>
+  <Link href="/login">ورود به صفحه ورود</Link>
+</Button>
+
+      </Link>
+    </div>
+  );
+}
+
+
 
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },

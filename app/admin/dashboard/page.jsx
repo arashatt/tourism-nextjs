@@ -28,7 +28,7 @@ export default async function AdminDashboardPage() {
   }
 
 	return (
-    <div className="min-h-screen p-8 bg-gray-100">
+    <div className="min-h-screen p-8 ">
       <h1 className="text-4xl font-bold mb-8">Admin Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

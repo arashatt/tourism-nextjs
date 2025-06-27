@@ -35,7 +35,7 @@ export default function LoginForm() {
 
   if (session) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4" dir="rtl">
+      <div className="flex min-h-screen items-center justify-center  p-4" dir="rtl">
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle>Welcome</CardTitle>
@@ -56,7 +56,7 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+    <div className="flex min-h-screen items-center justify-center  p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="font-vazir">ورود</CardTitle>

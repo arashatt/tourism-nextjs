@@ -12,7 +12,7 @@ export default function Home() {
     await signIn("credentials", {
       username,
       password,
-      callbackUrl: "/dashboard", // redirect after login
+      callbackUrl: "/", // redirect after login
     });
   };
 

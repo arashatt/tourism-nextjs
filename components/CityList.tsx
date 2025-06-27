@@ -41,7 +41,7 @@ export default function CityList() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4" dir="rtl">
+    <div className="min-h-screen  p-4" dir="rtl">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center font-vazir">
           انتخاب شهر برای تور

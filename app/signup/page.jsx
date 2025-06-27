@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import {
   Card,
   CardContent,
@@ -14,13 +15,42 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
 export default function SignupForm() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const router = useRouter();
 
+  if (status === "loading") {
+    // Optionally show loading state while session loads
+    return <p className="text-center p-4">در حال بارگذاری...</p>;
+  }
+
+  if (session?.user) {
+    // User is logged in, show message + button to return home
+    return (
+      <div className="flex min-h-screen items-center justify-center  p-4" dir="rtl">
+        <Card className="w-full max-w-md text-center">
+          <CardHeader>
+            <CardTitle className="font-vazir">شما قبلاً وارد شده‌اید</CardTitle>
+            <CardDescription className="font-vazir mb-4">
+              برای ثبت‌نام نیازی به ورود مجدد نیست.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button onClick={() => router.push("/")} className="w-full">
+              بازگشت به صفحه اصلی
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // If not logged in, show signup form
   const handleSignup = async (e) => {
     e.preventDefault();
     setError("");
@@ -43,7 +73,7 @@ export default function SignupForm() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4" dir="rtl">
+    <div className="flex min-h-screen items-center justify-center  p-4" dir="rtl">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="font-vazir">ثبت‌نام</CardTitle>

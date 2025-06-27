@@ -4,13 +4,16 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { PrismaClient } from "@prisma/client";
+import CityForm from "@/components/CityForm";
+
 const prisma = new PrismaClient();
 
 export default async function AdminDashboardPage() {
   const session = await getServerSession(authOptions);
   
-  if (!session) {
-    redirect("/login");  // not logged in
+  if (!session || !session.user?.email) {
+
+    redirect("/");  // not logged in
   }
 
   // Read fresh user role from database
@@ -19,6 +22,7 @@ export default async function AdminDashboardPage() {
     select: { role: true },
   });
 
+  
   if (!user || user.role !== "admin") {
     redirect("/");  // no admin rights
   }
@@ -30,7 +34,7 @@ export default async function AdminDashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Link href="/admin/cities">
           <Card className="hover:shadow-xl transition">
-            {user.role}
+
 
             <CardHeader>
               <CardTitle>Manage Cities</CardTitle>

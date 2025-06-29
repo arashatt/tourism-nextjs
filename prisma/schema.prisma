@@ -30,7 +30,7 @@ model Tour {
   price       Float
   cityId      String
   bookings    Booking[]
-  city        City      @relation(fields: [cityId], references: [id])
+  city        City      @relation(fields: [cityId], references: [id], onDelete: Cascade)
 }
 
 model Booking {

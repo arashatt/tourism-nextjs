@@ -3,6 +3,8 @@ import { authOptions } from "@/lib/auth"; // Make sure this path is correct
 import { prisma } from "@/lib/prisma";   // Make sure this path is correct
 import CityForm from "@/components/CityForm"; // Reusable form to add a city
 import DeleteCitiesForm from "@/components/DeleteCityForm"; // Reusable form to add a city
+import CityList from "@/components/CityList";
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -49,15 +51,7 @@ export default async function AdminCitiesPage() {
     </div>
 
       <h2 className="text-2xl font-semibold mt-12 mb-4">شهرهای موجود:</h2>
-      <ul className="list-disc list-inside space-y-2">
-        {cities.map((city) => (
-          <li key={city.id}>
-            <Link href={`/cities/${city.id}`} className="text-blue-600 underline">
-              {city.name}
-            </Link>
-          </li>
-        ))}
-      </ul>
+<CityList />
     </div>
   );
 }

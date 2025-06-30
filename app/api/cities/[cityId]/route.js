@@ -2,7 +2,7 @@
 import { prisma } from '@/lib/prisma';
 
 export async function DELETE(request, { params }) {
-  const { cityId } = params;
+  const { cityId } = await params;
 
   try {
     await prisma.city.delete({

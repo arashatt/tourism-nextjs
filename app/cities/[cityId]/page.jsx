@@ -1,9 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link"; // for routing to booking
 
 export default async function CityPage({ params }) {
-  const { cityId } = await params; // ✅ این باعث رفع خطا می‌شود
+  const { cityId } = await params;
 
   const city = await prisma.city.findUnique({
     where: { id: cityId },
@@ -28,11 +29,26 @@ export default async function CityPage({ params }) {
       )}
 
       <div>
-        <h2 className="text-xl font-semibold mt-4">تورهای این شهر</h2>
-        <ul className="list-disc list-inside mt-2 space-y-1 text-muted-foreground">
-<h2 className="text-xl font-semibold mt-4">تورهای شهر {city.name}</h2>
+        <h2 className="text-xl font-semibold mt-4">
+          تورهای شهر {city.name}
+        </h2>
+        <ul className="mt-4 space-y-3">
           {city.tours.map((tour) => (
-            <li key={tour.id}>{tour.name}</li>
+            <li
+              key={tour.id}
+              className="p-4 border rounded-lg flex items-center justify-between"
+            >
+              <div>
+                <p className="font-medium">{tour.name}</p>
+                {/* Add price or description if needed */}
+              </div>
+              <Link
+                href={`/bookings/new?tourId=${tour.id}`}
+                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+              >
+                رزرو
+              </Link>
+            </li>
           ))}
         </ul>
       </div>

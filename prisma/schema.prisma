@@ -27,6 +27,8 @@ model Tour {
   id          String    @id @default(cuid())
   title       String
   name        String
+  description String @default("No description provided")
+  image       String?  // Optional field for image URL or path
   price       Float
   cityId      String
   bookings    Booking[]

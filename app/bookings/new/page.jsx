@@ -48,7 +48,7 @@ export default async function NewBookingPage({ searchParams }) {
   return (
     <div className="max-w-xl mx-auto p-6 space-y-6">
       <h1 className="text-2xl font-bold text-center">
-        رزرو تور: {tour.name}
+        رزرو اقامتگاه: {tour.name}
       </h1>
 
       <form action={handleBooking} className="space-y-4">

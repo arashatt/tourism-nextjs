@@ -44,7 +44,7 @@ export default function CityList() {
     <div className="min-h-screen  p-4" dir="rtl">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center font-vazir">
-          انتخاب شهر برای تور
+          انتخاب شهر برای اقامت
         </h1>
         {error && (
           <Alert variant="destructive" className="mb-6 font-vazir">
@@ -72,7 +72,7 @@ export default function CityList() {
                     onClick={() => handleCitySelect(city.id)}
                     className="w-full font-vazir"
                   >
-                    انتخاب تور
+                    انتخاب اقامتگاه
                   </Button>
                 </CardContent>
               </Card>

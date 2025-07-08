@@ -48,7 +48,7 @@ export default async function AdminBookingsPage() {
           <tr>
             <th className="border px-4 py-2">نام کاربر</th>
             <th className="border px-4 py-2">ایمیل</th>
-            <th className="border px-4 py-2">عنوان تور</th>
+            <th className="border px-4 py-2">عنوان اقامتگاه</th>
             <th className="border px-4 py-2">وضعیت</th>
             <th className="border px-4 py-2">تاریخ ثبت</th>
           </tr>

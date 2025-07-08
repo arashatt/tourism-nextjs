@@ -70,7 +70,7 @@ export default async function MyBookingsPage() {
         <table className="w-full text-right border border-gray-300">
           <thead className="bg-gray-100">
             <tr>
-              <th className="border px-4 py-2">عنوان تور</th>
+              <th className="border px-4 py-2">عنوان اقامتگاه</th>
               <th className="border px-4 py-2">تاریخ رزرو</th>
               <th className="border px-4 py-2">تاریخ ثبت</th>
               <th className="border px-4 py-2">عملیات</th>

@@ -30,7 +30,7 @@ export default async function CityPage({ params }) {
 
       <div>
         <h2 className="text-xl font-semibold mt-4">
-          تورهای شهر {city.name}
+          اقامتگاه‌های شهر {city.name}
         </h2>
         <ul className="mt-4 space-y-3">
           {city.tours.map((tour) => (

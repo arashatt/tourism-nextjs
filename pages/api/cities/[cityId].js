@@ -1,8 +1,9 @@
-// pages/api/cities/[cityId].js
 import formidable from "formidable";
 import fs from "fs";
 import path from "path";
 import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
 
 export const config = {
   api: {
@@ -14,6 +15,20 @@ const uploadDir = path.join(process.cwd(), "public", "uploads");
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
 export default async function handler(req, res) {
+  // ابتدا سشن را دریافت می‌کنیم
+  const session = await getServerSession(req, res, authOptions);
+  if (!session?.user?.email) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  // نقش کاربر را از دیتابیس می‌گیریم
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+  });
+  if (!user || user.role !== "admin") {
+    return res.status(403).json({ error: "Forbidden" });
+  }
+
   const { cityId } = req.query;
 
   if (req.method === "PUT") {

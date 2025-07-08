@@ -1,11 +1,34 @@
 // app/admin/cities/[cityId]/edit/page.jsx
 import EditCityForm from "@/components/EditCityForm";
 import { prisma } from "@/lib/prisma";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import Link from "next/link";
 
 export default async function EditCityPage({ params }) {
   const { cityId } = await params;
+
+  // دریافت سشن کاربر
+  const session = await getServerSession(authOptions);
+
+  // اگر کاربر لاگین نکرده باشد، به صفحه ورود ریدایرکت شود
+  if (!session || !session.user?.email) {
+    redirect("/login");
+  }
+
+  // گرفتن اطلاعات نقش کاربر از دیتابیس
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    select: { role: true },
+  });
+
+  // اگر کاربر ادمین نبود، به صفحه اصلی ریدایرکت شود
+  if (user?.role !== "admin") {
+    redirect("/");
+  }
+
+  // دریافت شهر بر اساس شناسه
   const city = await prisma.city.findUnique({
     where: { id: cityId },
   });
@@ -24,4 +47,3 @@ export default async function EditCityPage({ params }) {
     </div>
   );
 }
-

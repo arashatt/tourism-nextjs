@@ -18,24 +18,36 @@ export default function CityList() {
   const [cities, setCities] = useState<City[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [userRole, setUserRole] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     async function fetchCities() {
       try {
         const response = await fetch("/api/cities");
-        if (!response.ok) {
-          throw new Error("خطا در بارگذاری شهرها");
-        }
+        if (!response.ok) throw new Error("خطا در بارگذاری شهرها");
         const data = await response.json();
         setCities(data);
-      } catch (err) {
+      } catch {
         setError("خطا در دریافت لیست شهرها. لطفاً دوباره تلاش کنید.");
       } finally {
         setIsLoading(false);
       }
     }
+
+    async function fetchUserRole() {
+      try {
+        const res = await fetch("/api/user/role");
+        if (!res.ok) throw new Error("Failed to fetch role");
+        const json = await res.json();
+        setUserRole(json.role);
+      } catch {
+        setUserRole(null);
+      }
+    }
+
     fetchCities();
+    fetchUserRole();
   }, []);
 
   const handleCitySelect = (cityId: string) => {
@@ -80,14 +92,16 @@ export default function CityList() {
                     >
                       انتخاب اقامتگاه
                     </Button>
-                    <Link href={`/admin/cities/${city.id}/edit`} className="w-full">
-                      <Button
-                        variant="outline"
-                        className="w-full font-vazir text-blue-600 border-blue-600"
-                      >
-                        ویرایش
-                      </Button>
-                    </Link>
+                    {userRole === "admin" && (
+                      <Link href={`/admin/cities/${city.id}/edit`} className="w-full">
+                        <Button
+                          variant="outline"
+                          className="w-full font-vazir text-blue-600 border-blue-600"
+                        >
+                          ویرایش
+                        </Button>
+                      </Link>
+                    )}
                   </div>
                 </CardContent>
               </Card>

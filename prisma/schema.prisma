@@ -1,46 +1,48 @@
-generator client {
-  provider = "prisma-client-js"
-}
+  generator client {
+    provider = "prisma-client-js"
+  }
 
-datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
-}
+  datasource db {
+    provider = "sqlite"
+    url      = "file:./dev.db"
+  }
 
-model User {
-  id       String    @id @default(cuid())
-  name     String?
-  email    String?   @unique
-  password String?
-  role     String    @default("user") // or "admin"
-  bookings Booking[]
-}
+  model User {
+    id       String    @id @default(cuid())
+    name     String?
+    email    String?   @unique
+    password String?
+    role     String    @default("user") // or "admin"
+    bookings Booking[]
+  }
 
-model City {
-  id    String @id @default(cuid())
-  name  String
-  image String
-  tours Tour[]
-}
+  model City {
+    id    String @id @default(cuid())
+    name  String
+    image String
+    tours Tour[]
+  }
 
-model Tour {
-  id          String    @id @default(cuid())
-  title       String
-  name        String
-  description String @default("No description provided")
-  image       String?  // Optional field for image URL or path
-  price       Float
-  cityId      String
-  bookings    Booking[]
-  city        City      @relation(fields: [cityId], references: [id], onDelete: Cascade)
-}
+  model Tour {
+    id          String    @id @default(cuid())
+    title       String
+    name        String
+    description String    @default("No description provided")
+    image       String?   // Optional field for image URL or path
+    price       Float
+    cityId      String
+    bookings    Booking[]
+    city        City      @relation(fields: [cityId], references: [id], onDelete: Cascade)
+    createdAt   DateTime  @default(now())   // Add this line
+  }
 
-model Booking {
-  id     String   @id @default(cuid())
-  date   DateTime
-  userId String
-  tourId String
-  tour   Tour     @relation(fields: [tourId], references: [id])
-  user   User     @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
-}
+
+  model Booking {
+    id     String   @id @default(cuid())
+    date   DateTime
+    userId String
+    tourId String
+    tour   Tour     @relation(fields: [tourId], references: [id])
+    user   User     @relation(fields: [userId], references: [id])
+    createdAt DateTime @default(now())
+  }

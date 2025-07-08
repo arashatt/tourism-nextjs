@@ -1,57 +1,69 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import ResidentSiteForm from "@/components/ResidentSiteForm";
 import { prisma } from "@/lib/prisma";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import TourForm from "@/components/TourForm"; // Create this next
+import Image from "next/image";
 
-export default async function AdminToursPage() {
+export default async function AdminResidentSitesPage() {
   const session = await getServerSession(authOptions);
-
-  if (!session?.user?.email) {
-    return (
-      <div className="text-center mt-8">
-        <p className="text-destructive mb-4">دسترسی غیرمجاز: لطفاً وارد شوید.</p>
-        <Button asChild>
-          <Link href="/login">ورود به صفحه ورود</Link>
-        </Button>
-      </div>
-    );
+  if (!session || !session.user?.email) {
+    redirect("/");
   }
 
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-    select: { role: true },
-  });
-
-  if (user?.role !== "admin") {
-    return (
-      <div className="text-center mt-8">
-        <p className="text-red-600">شما اجازه دسترسی به این صفحه را ندارید.</p>
-      </div>
-    );
-  }
-
-  const tours = await prisma.tour.findMany({
-    orderBy: { id: "desc" },
+  // Fetch all resident sites (tours) with city info
+  const residentSites = await prisma.tour.findMany({
+    include: {
+      city: true,
+    },
+    orderBy: { createdAt: "desc" },
   });
 
   return (
-    <div className="p-8">
-      <h1 className="text-4xl font-bold text-center mb-8">پنل مدیریت تورها</h1>
+    <div className="min-h-screen p-8 max-w-4xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6">مدیریت سایت‌های اقامتی</h1>
 
-      <TourForm />
+      <section className="mb-12">
+        <ResidentSiteForm />
+      </section>
 
-      <h2 className="text-2xl font-semibold mt-12 mb-4">تورهای ثبت‌شده:</h2>
-      <ul className="list-disc list-inside space-y-2">
-        {tours.map((tour) => (
-          <li key={tour.id}>
-            <Link href={`/tours/${tour.id}`} className="text-blue-600 underline">
-              {tour.title || `تور شماره ${tour.id}`}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <section>
+        <h2 className="text-2xl font-semibold mb-4">فهرست سایت‌های اقامتی</h2>
+        {residentSites.length === 0 ? (
+          <p>هیچ سایت اقامتی یافت نشد.</p>
+        ) : (
+          <ul className="space-y-6">
+            {residentSites.map((site) => (
+              <li
+                key={site.id}
+                className="flex items-start gap-8 rtl:gap-8 p-4 border rounded"
+              >
+                
+                {site.image && (
+                  <Image
+                    src={site.image}
+                    alt={site.name}
+                    width={120}
+                    height={80}
+    className="object-cover rounded mr-8 rtl:mr-0 rtl:ml-8"
+                    
+                  />
+                )}
+                <div>
+                  <h3 className="text-lg font-bold">{site.name}</h3>
+                  <p>شهر: {site.city?.name || "نامشخص"}</p>
+                  <p>قیمت: {site.price.toLocaleString()} تومان</p>
+                  {site.description && (
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {site.description}
+                    </p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
     </div>
   );
 }

@@ -4,7 +4,6 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { PrismaClient } from "@prisma/client";
-import CityForm from "@/components/CityForm";
 
 const prisma = new PrismaClient();
 
@@ -12,30 +11,25 @@ export default async function AdminDashboardPage() {
   const session = await getServerSession(authOptions);
   
   if (!session || !session.user?.email) {
-
-    redirect("/");  // not logged in
+    redirect("/"); // not logged in
   }
 
-  // Read fresh user role from database
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
     select: { role: true },
   });
 
-  
   if (!user || user.role !== "admin") {
-    redirect("/");  // no admin rights
+    redirect("/"); // no admin rights
   }
 
-	return (
-    <div className="min-h-screen p-8 ">
+  return (
+    <div className="min-h-screen p-8">
       <h1 className="text-4xl font-bold mb-8">Admin Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Link href="/admin/cities">
           <Card className="hover:shadow-xl transition">
-
-
             <CardHeader>
               <CardTitle>Manage Cities</CardTitle>
             </CardHeader>
@@ -43,12 +37,12 @@ export default async function AdminDashboardPage() {
           </Card>
         </Link>
 
-        <Link href="/admin/tours">
+        <Link href="/admin/resident-sites">
           <Card className="hover:shadow-xl transition">
             <CardHeader>
-              <CardTitle>Manage Tours</CardTitle>
+              <CardTitle>Manage Resident Sites</CardTitle>
             </CardHeader>
-            <CardContent>View, add, edit, or delete tours.</CardContent>
+            <CardContent>View, add, edit, or delete resident sites.</CardContent>
           </Card>
         </Link>
 
@@ -64,4 +58,3 @@ export default async function AdminDashboardPage() {
     </div>
   );
 }
-

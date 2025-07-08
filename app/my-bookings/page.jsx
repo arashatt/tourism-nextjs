@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { revalidatePath } from "next/cache";
 
-export default async function MyBookingsPage() {
+export default async function MyBookingsPage({ searchParams }) {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.email) return redirect("/login");
@@ -26,6 +26,8 @@ export default async function MyBookingsPage() {
       },
     },
   });
+
+  const { newBookingId } = await searchParams;
 
   async function handleCancelBooking(formData) {
     "use server";
@@ -78,10 +80,17 @@ export default async function MyBookingsPage() {
           </thead>
           <tbody>
             {bookings.map((booking) => (
-              <tr key={booking.id}>
+              <tr
+                key={booking.id}
+                className={
+                  booking.id === newBookingId
+                    ? "bg-yellow-100 border-2 border-yellow-400"
+                    : ""
+                }
+              >
                 <td className="border px-4 py-2">
                   <Link
-                    href={`/tours/${booking.tour.id}`}
+                    href={`/resident-sites/${booking.tour.id}`}
                     className="text-blue-600 underline"
                   >
                     {booking.tour.title}

@@ -4,7 +4,8 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export async function GET(request, { params }) {
-  const { tourId } = params;
+  const { cityId } = await params;
+  const tourId = cityId;
   const tour = await prisma.tour.findUnique({
     where: { id: tourId },  // ID is a string (cuid)
   });

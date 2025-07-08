@@ -31,9 +31,13 @@ async function handler(req, res) {
       });
 
       const { fields, files } = parsed;
-      const name = Array.isArray(fields.name) ? fields.name[0] : fields.name;
-      let image = "";
 
+      const name = Array.isArray(fields.name) ? fields.name[0] : fields.name;
+      const description = Array.isArray(fields.description)
+        ? fields.description[0]
+        : fields.description || "";
+
+      let image = "";
       if (files.image) {
         const file = Array.isArray(files.image) ? files.image[0] : files.image;
         const fileName = path.basename(file.filepath);
@@ -43,6 +47,7 @@ async function handler(req, res) {
       const city = await prisma.city.create({
         data: {
           name,
+          description,
           image,
         },
       });

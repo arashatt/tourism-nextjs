@@ -5,11 +5,13 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import Link from "next/link";
 
 interface City {
   id: string;
   name: string;
   image: string;
+  description?: string;
 }
 
 export default function CityList() {
@@ -41,7 +43,7 @@ export default function CityList() {
   };
 
   return (
-    <div className="min-h-screen  p-4" dir="rtl">
+    <div className="min-h-screen p-4" dir="rtl">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center font-vazir">
           انتخاب شهر برای اقامت
@@ -68,12 +70,25 @@ export default function CityList() {
                     alt={`${city.name} تصویر`}
                     className="w-full h-48 object-cover rounded-md mb-4"
                   />
-                  <Button
-                    onClick={() => handleCitySelect(city.id)}
-                    className="w-full font-vazir"
-                  >
-                    انتخاب اقامتگاه
-                  </Button>
+                  <p className="mb-4 text-gray-700 whitespace-pre-wrap font-vazir" dir="rtl">
+                    {city.description || "توضیحی برای این شهر ثبت نشده است."}
+                  </p>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={() => handleCitySelect(city.id)}
+                      className="w-full font-vazir"
+                    >
+                      انتخاب اقامتگاه
+                    </Button>
+                    <Link href={`/admin/cities/${city.id}/edit`} className="w-full">
+                      <Button
+                        variant="outline"
+                        className="w-full font-vazir text-blue-600 border-blue-600"
+                      >
+                        ویرایش
+                      </Button>
+                    </Link>
+                  </div>
                 </CardContent>
               </Card>
             ))}

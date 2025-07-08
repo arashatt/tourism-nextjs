@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 
 export default async function AdminDashboardPage() {
   const session = await getServerSession(authOptions);
-  
+
   if (!session || !session.user?.email) {
     redirect("/"); // not logged in
   }
@@ -24,34 +24,40 @@ export default async function AdminDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen p-8">
-      <h1 className="text-4xl font-bold mb-8">Admin Dashboard</h1>
+    <div className="min-h-screen p-8 bg-gray-50">
+      <h1 className="text-4xl font-bold mb-10 text-center text-gray-800">پنل مدیریت</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Link href="/admin/cities">
-          <Card className="hover:shadow-xl transition">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <Link href="/admin/cities" className="group">
+          <Card className="hover:shadow-xl transition cursor-pointer">
             <CardHeader>
-              <CardTitle>Manage Cities</CardTitle>
+              <CardTitle className="text-xl font-semibold text-right">مدیریت شهرها</CardTitle>
             </CardHeader>
-            <CardContent>View, add, edit, or delete cities.</CardContent>
+            <CardContent className="text-gray-600 text-right">
+              مشاهده، افزودن، ویرایش یا حذف شهرها
+            </CardContent>
           </Card>
         </Link>
 
-        <Link href="/admin/resident-sites">
-          <Card className="hover:shadow-xl transition">
+        <Link href="/admin/resident-sites" className="group">
+          <Card className="hover:shadow-xl transition cursor-pointer">
             <CardHeader>
-              <CardTitle>Manage Resident Sites</CardTitle>
+              <CardTitle className="text-xl font-semibold text-right">مدیریت اقامتگاه‌ها</CardTitle>
             </CardHeader>
-            <CardContent>View, add, edit, or delete resident sites.</CardContent>
+            <CardContent className="text-gray-600 text-right">
+              مشاهده، افزودن، ویرایش یا حذف اقامتگاه‌ها
+            </CardContent>
           </Card>
         </Link>
 
-        <Link href="/admin/bookings">
-          <Card className="hover:shadow-xl transition">
+        <Link href="/admin/bookings" className="group">
+          <Card className="hover:shadow-xl transition cursor-pointer">
             <CardHeader>
-              <CardTitle>View Bookings</CardTitle>
+              <CardTitle className="text-xl font-semibold text-right">مشاهده رزروها</CardTitle>
             </CardHeader>
-            <CardContent>See all bookings by users.</CardContent>
+            <CardContent className="text-gray-600 text-right">
+              نمایش تمامی رزروهای کاربران
+            </CardContent>
           </Card>
         </Link>
       </div>

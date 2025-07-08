@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 export default function CityForm() {
   const [name, setName] = useState("");
   const [imageFile, setImageFile] = useState(null);
+  const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
 
   const handleSubmit = async (e) => {
@@ -17,19 +17,21 @@ export default function CityForm() {
 
     const formData = new FormData();
     formData.append("name", name);
+    formData.append("description", description);
     if (imageFile) {
       formData.append("image", imageFile);
     }
 
-const res = await fetch("/api/cities", {
-  method: "POST",
-  body: formData, // already handled correctly
-});
+    const res = await fetch("/api/cities", {
+      method: "POST",
+      body: formData,
+    });
 
     if (res.ok) {
       setStatus("✅ شهر با موفقیت اضافه شد.");
       setName("");
       setImageFile(null);
+      setDescription("");
     } else {
       setStatus("❌ خطا در افزودن شهر.");
     }
@@ -50,6 +52,19 @@ const res = await fetch("/api/cities", {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
+              dir="rtl"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="description">توضیحات شهر</Label>
+            <textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={4}
+              className="w-full border rounded-lg px-4 py-2 resize-y"
+              dir="rtl"
             />
           </div>
 
